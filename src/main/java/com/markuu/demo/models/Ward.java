@@ -22,11 +22,11 @@ public class Ward {
     }
 
     public String getType() {
-        return type;
+        return wType;
     }
 
     public void setType(String type) {
-        this.type = type;
+        this.wType = type;
     }
 
     public String getEquipment() {
@@ -68,7 +68,7 @@ public class Ward {
     private int available_places;
 
     @Column(nullable = false)
-    private String type;
+    private String wType;
 
     private String equipment;
 

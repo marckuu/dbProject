@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Система учета пациентов родильного дома</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div class="container mt-4">
+  <header class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <button class="btn btn-primary" onclick="showDiv('patientsDiv')">Пациентки</button>
+      <button class="btn btn-primary" onclick="showDiv('staffDiv')">Персонал</button>
+      <button class="btn btn-primary" onclick="showDiv('childrenDiv')">Дети</button>
+      <form action="/getWards" method="get">
+      <button type="button" class="btn btn-primary" onclick="showDiv('wardsDiv')">Палаты</button>
+      </form>
+      <form action="/getHospitalizations" method="get">
+      <button type="button" class="btn btn-primary" onclick="showDiv('hospDiv')">Госпитализации</button>
+      </form>
+      <button class="btn btn-primary" onclick="showDiv('childbirthDiv')">Роды</button>
+    </div>
+    <div>
+      <form action="/report1" method="get" class="d-inline">
+        <button type="submit" class="btn btn-secondary">Отчет 1</button>
+      </form>
+      <form action="/report2" method="get" class="d-inline">
+        <button type="submit" class="btn btn-secondary">Отчет 2</button>
+      </form>
+      <form action="/report3" method="get" class="d-inline">
+        <button type="submit" class="btn btn-secondary">Отчет 3</button>
+      </form>
+    </div>
+  </header>
+
+
+  <div id="patientsDiv" class="data-div" style="display: none;">
+    <h3>Список пациенток</h3>
+    <ul class="list-group">
+      <li th:each="item : ${patients}" class="list-group-item d-flex justify-content-between align-items-center">
+        <span th:text="${item.first_name} + ' ' + ${item.middle_name} + ' ' + ${item.last_name}">Имя пациентки</span>
+        <span th:text="'Телефон: ' + ${item.mobile_phone}">Телефон</span>
+        <span th:text="'Адрес: ' + ${item.address}">Адрес</span>
+        <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editPatientModal"
+                th:data-id="${item.id}"
+                th:data-first-name="${item.first_name}"
+                th:data-middle-name="${item.middle_name}"
+                th:data-last-name="${item.last_name}"
+                th:data-mobile-phone="${item.mobile_phone}"
+                th:data-address="${item.address}">Редактировать</button>
+      </li>
+      <li th:if="${#lists.isEmpty(patients)}" class="list-group-item">Данных нет</li>
+    </ul>
+  </div>
+
+  <div id="hospDiv" class="data-div" style="display: none;">
+    <h3>Список Госпитализаций</h3>
+    <ul class="list-group">
+      <li th:each="item : ${hospitalizations}" class="list-group-item d-flex justify-content-between align-items-center">
+        <span th:text="'Пациент: ' + ${item.patient.first_name} + ' ' + ${item.patient.middle_name} + ' ' + ${item.patient.last_name}">Имя пациентки</span>
+        <span th:text="'Дата: ' + ${item.hosp_data}">Дата госпитализации</span>
+        <span th:text="'Время: ' + ${item.hosp_time}">Время госпитализации</span>
+        <span th:text="' Причина: ' + ${item.hosp_reason}">Причина госпитализации</span>
+        <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editHospModal"
+                th:data-id="${item.id}"
+                th:data-patient-name="${item.patient.first_name} + ' ' + ${item.patient.middle_name} + ' ' + ${item.patient.last_name}"
+                th:data-hosp-data="${item.hosp_data}"
+                th:data-hosp-time="${item.hosp_time}"
+                th:data-hosp-reason="${item.hosp_reason}">Редактировать</button>
+      </li>
+      <li th:if="${#lists.isEmpty(hospitalizations)}" class="list-group-item">Данных нет</li>
+    </ul>
+  </div>
+
+  <div id="childbirthDiv" class="data-div" style="display: none;">
+    <h3>Список Родов</h3>
+    <ul class="list-group">
+      <li th:each="item : ${childbirths}" class="list-group-item d-flex justify-content-between align-items-center">
+        <span th:text="'Пациент: ' + ${item.patient.first_name} + ' ' + ${item.patient.middle_name} + ' ' + ${item.patient.last_name}">Имя пациентки</span>
+        <span th:text="'Дата: ' + ${item.childB_date}">Дата родов</span>
+        <span th:text="'Начало: ' + ${item.childB_start_time}">Начало родов</span>
+        <span th:text="'Конец: ' + ${item.childB_end_time}">Конец родов</span>
+        <span th:text="'Тип: ' + ${item.childB_type}">Тип родов</span>
+        <span th:text="'Осложнения: ' + ${item.childB_complications}">Осложнения</span>
+        <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editChildbirthModal"
+                th:data-id="${item.id}"
+                th:data-patient-name="${item.patient.first_name} + ' ' + ${item.patient.middle_name} + ' ' + ${item.patient.last_name}"
+                th:data-childb-date="${item.childB_date}"
+                th:data-childb-start-time="${item.childB_start_time}"
+                th:data-childb-end-time="${item.childB_end_time}"
+                th:data-childb-type="${item.childB_type}"
+                th:data-childb-complications="${item.childB_complications}">Редактировать</button>
+      </li>
+      <li th:if="${#lists.isEmpty(childbirths)}" class="list-group-item">Данных нет</li>
+    </ul>
+  </div>
+
+  <div id="staffDiv" class="data-div" style="display: none;">
+    <h3>Список персонала</h3>
+    <ul class="list-group">
+      <li th:each="item : ${employees}" class="list-group-item d-flex justify-content-between align-items-center">
+        <span th:text="'Сотрудник: ' + ${item.first_name} + ' ' + ${item.middle_name} + ' ' + ${item.last_name}">Имя сотрудника</span>
+        <span th:text="'Должность: ' + ${item.post}">Должность</span>
+        <span th:text="'Телефон: ' + ${item.mobile_phone}">Телефон</span>
+        <span th:text="'Зарплата: ' + ${item.salary}">Зарплата</span>
+        <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editStaffModal"
+                th:data-id="${item.id}"
+                th:data-first-name="${item.first_name}"
+                th:data-middle-name="${item.middle_name}"
+                th:data-last-name="${item.last_name}"
+                th:data-mobile-phone="${item.mobile_phone}"
+                th:data-post="${item.post}"
+                th:data-salary="${item.salary}">Редактировать</button>
+      </li>
+      <li th:if="${#lists.isEmpty(employees)}" class="list-group-item">Данных нет</li>
+    </ul>
+  </div>
+
+  <div id="childrenDiv" class="data-div" style="display: none;">
+    <h3>Список детей</h3>
+    <ul class="list-group">
+      <li th:each="item : ${children}" class="list-group-item d-flex justify-content-between align-items-center">
+        <span th:text="'Имя: ' + ${item.first_name} + ' ' + ${item.middle_name} + ' ' + ${item.last_name}">Имя ребенка</span>
+        <span th:text="'Дата рождения: ' + ${item.birth_date}">Дата рождения</span>
+        <span th:text="'Рост: ' + ${item.height} + ' см'">Рост</span>
+        <span th:text="'Вес: ' + ${item.weight} + ' кг'">Вес</span>
+        <span th:text="'Пол: ' + ${item.gender}">Пол</span>
+        <span th:text="'Патологии: ' + ${item.pathologies}">Патологии</span>
+        <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editChildModal"
+                th:data-id="${item.id}"
+                th:data-first-name="${item.first_name}"
+                th:data-middle-name="${item.middle_name}"
+                th:data-last-name="${item.last_name}"
+                th:data-birth-date="${item.birth_date}"
+                th:data-height="${item.height}"
+                th:data-weight="${item.weight}"
+                th:data-gender="${item.gender}"
+                th:data-pathologies="${item.pathologies}">Редактировать</button>
+      </li>
+      <li th:if="${#lists.isEmpty(children)}" class="list-group-item">Данных нет</li>
+    </ul>
+  </div>
+
+    <div id="wardsDiv" class="data-div" style="display: none;">
+    <h3>Список палат</h3>
+    <ul class="list-group">
+      <li th:each="item : ${wards}" class="list-group-item d-flex justify-content-between align-items-center">
+        <span th:text="'Имя палаты: ' + ${item.id}">Номер палаты</span>
+        <span th:text="'Тип: ' + ${item.type}">Тип палаты</span>
+        <span th:text="'Доступные места: ' + ${item.available_places}">Доступные места</span>
+        <span th:text="'Оборудование: ' + ${item.equipment}">Оборудование</span>
+        <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editWardModal"
+                th:data-id="${item.id}"
+                th:data-type="${item.type}"
+                th:data-available-places="${item.available_places}"
+                th:data-equipment="${item.equipment}">Редактировать</button>
+      </li>
+      <li th:if="${#lists.isEmpty(wards)}" class="list-group-item">Данных нет</li>
+    </ul>
+  </div>
+
+
+  <!-- Модальное окно для редактирования пациенток -->
+  <div class="modal fade" id="editPatientModal" tabindex="-1" role="dialog" aria-labelledby="editPatientModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editPatientModalLabel">Редактировать пациентку</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="editPatientForm">
+            <div class="form-group">
+              <label for="patientFirstName">Имя</label>
+              <input type="text" class="form-control" id="patientFirstName" name="firstName" required>
+            </div>
+            <div class="form-group">
+              <label for="patientMiddleName">Отчество</label>
+              <input type="text" class="form-control" id="patientMiddleName" name="middleName">
+            </div>
+            <div class="form-group">
+              <label for="patientLastName">Фамилия</label>
+              <input type="text" class="form-control" id="patientLastName" name="lastName" required>
+            </div>
+            <div class="form-group">
+              <label for="patientMobilePhone">Телефон</label>
+              <input type="text" class="form-control" id="patientMobilePhone" name="mobilePhone" required>
+            </div>
+            <div class="form-group">
+              <label for="patientAddress">Адрес</label>
+              <input type="text" class="form-control" id="patientAddress" name="address">
+            </div>
+            <input type="hidden" id="patientId" name="id">
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+          <button type="submit" class="btn btn-primary" form="editPatientForm">Сохранить изменения</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Модальное окно для редактирования госпитализаций -->
+  <div class="modal fade" id="editHospModal" tabindex="-1" role="dialog" aria-labelledby="editHospModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editHospModalLabel">Редактировать госпитализацию</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="editHospForm">
+            <div class="form-group">
+              <label for="hospPatientName">Пациент</label>
+              <input type="text" class="form-control" id="hospPatientName" name="patientName" required readonly>
+            </div>
+            <div class="form-group">
+              <label for="hospData">Дата</label>
+              <input type="date" class="form-control" id="hospData" name="hospData" required>
+            </div>
+            <div class="form-group">
+              <label for="hospTime">Время</label>
+              <input type="time" class="form-control" id="hospTime" name="hospTime" required>
+            </div>
+            <div class="form-group">
+              <label for="hospReason">Причина</label>
+              <input type="text" class="form-control" id="hospReason" name="hospReason" required>
+            </div>
+            <input type="hidden" id="hospId" name="id">
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+          <button type="submit" class="btn btn-primary" form="editHospForm">Сохранить изменения</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Модальное окно для редактирования родов -->
+  <div class="modal fade" id="editChildbirthModal" tabindex="-1" role="dialog" aria-labelledby="editChildbirthModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editChildbirthModalLabel">Редактировать роды</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="editChildbirthForm">
+            <div class="form-group">
+              <label for="childbirthPatientName">Пациент</label>
+              <input type="text" class="form-control" id="childbirthPatientName" name="patientName" required readonly>
+            </div>
+            <div class="form-group">
+              <label for="birthDate">Дата</label>
+              <input type="date" class="form-control" id="birthDate" name="birthDate" required>
+            </div>
+            <div class="form-group">
+              <label for="childbirthStartTime">Начало</label>
+              <input type="time" class="form-control" id="childbirthStartTime" name="childbirthStartTime" required>
+            </div>
+            <div class="form-group">
+              <label for="childbirthEndTime">Конец</label>
+              <input type="time" class="form-control" id="childbirthEndTime" name="childbirthEndTime" required>
+            </div>
+            <div class="form-group">
+              <label for="childbirthType">Тип</label>
+              <input type="text" class="form-control" id="childbirthType" name="childbirthType" required>
+            </div>
+            <div class="form-group">
+              <label for="childbirthComplications">Осложнения</label>
+              <input type="text" class="form-control" id="childbirthComplications" name=" childbirthComplications">
+            </div>
+            <input type="hidden" id="childbirthId" name="id">
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+          <button type="submit" class="btn btn-primary" form="editChildbirthForm">Сохранить изменения</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Модальное окно для редактирования персонала -->
+  <div class="modal fade" id="editStaffModal" tabindex="-1" role="dialog" aria-labelledby="editStaffModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editStaffModalLabel">Редактировать сотрудника</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="editStaffForm">
+            <div class="form-group">
+              <label for="staffFirstName">Имя</label>
+              <input type="text" class="form-control" id="staffFirstName" name="firstName" required>
+            </div>
+            <div class="form-group">
+              <label for="staffMiddleName">Отчество</label>
+              <input type="text" class="form-control" id="staffMiddleName" name="middleName">
+            </div>
+            <div class="form-group">
+              <label for="staffLastName">Фамилия</label>
+              <input type="text" class="form-control" id="staffLastName" name="lastName" required>
+            </div>
+            <div class="form-group">
+              <label for="staffMobilePhone">Телефон</label>
+              <input type="text" class="form-control" id="staffMobilePhone" name="mobilePhone" required>
+            </div>
+            <div class="form-group">
+              <label for="staffPost">Должность</label>
+              <input type="text" class="form-control" id="staffPost" name="post" required>
+            </div>
+            <div class="form-group">
+              <label for="staffSalary">Зарплата</label>
+              <input type="number" class="form-control" id="staffSalary" name="salary" required>
+            </div>
+            <input type="hidden" id="staffId" name="id">
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+          <button type="submit" class="btn btn-primary" form="editStaffForm">Сохранить изменения</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Модальное окно для редактирования детей -->
+  <div class="modal fade" id="editChildModal" tabindex="-1" role="dialog" aria-labelledby="editChildModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editChildModalLabel">Редактировать ребенка</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="editChildForm">
+            <div class="form-group">
+              <label for="childFirstName">Имя</label>
+              <input type="text" class="form-control" id="childFirstName" name="firstName" required>
+            </div>
+            <div class="form-group">
+              <label for="childMiddleName">Отчество</label>
+              <input type="text" class="form-control" id="childMiddleName" name="middleName">
+            </div>
+            <div class="form-group">
+              <label for="childLastName">Фамилия</label>
+              <input type="text" class="form-control" id="childLastName" name="lastName" required>
+            </div>
+            <div class="form-group">
+              <label for="childBirthDate">Дата рождения</label>
+              <input type="date" class="form-control" id="childBirthDate" name="birthDate" required>
+            </div>
+            <div class="form-group">
+              <label for="childHeight">Рост</label>
+              <input type="number" class="form-control" id="childHeight" name="height" required>
+            </div>
+            <div class="form-group">
+              <label for="childWeight">Вес</label>
+              <input type="number" class="form-control" id="childWeight" name="weight" required>
+            </div>
+            <div class="form-group">
+              <label for="childGender">Пол</label>
+              <select class="form-control" id="childGender" name="gender" required>
+                <option value="М">Мужской</option>
+                <option value="Ж">Женский</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="childPathologies">Патологии</label>
+              <input type="text" class="form-control" id="childPathologies" name="pathologies">
+            </div>
+            <input type="hidden" id="childId" name="id">
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+          <button type="submit" class="btn btn-primary" form="editChildForm">Сохранить изменения</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Модальное окно для редактирования палат -->
+  <div class="modal fade" id="editWardModal" tabindex="-1" role="dialog" aria-labelledby="editWardModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editWardModalLabel">Редактировать палату</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="editWardForm">
+            <div class="form-group">
+              <label for="wardName">Имя палаты</label>
+              <input type="text" class="form-control" id="wardName" name="name" required>
+            </div>
+            <div class="form-group">
+              <label for="wardType">Тип палаты</label>
+              <input type="text" class="form-control" id="wardType" name="type" required>
+            </div>
+            <div class="form-group">
+              <label for="wardAvailablePlaces">Доступные места</label>
+              <input type="number" class="form-control" id="wardAvailablePlaces" name="availablePlaces" required>
+            </div>
+            <div class="form-group">
+              <label for="wardEquipment">Оборудование</label>
+              <input type="text" class="form-control" id="wardEquipment" name="equipment">
+            </div>
+            <input type="hidden" id="wardId" name="id">
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+          <button type="submit" class="btn btn-primary" form="editWardForm">Сохранить изменения</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <script>
+    function showDiv(divId) {
+      // console.log("showDiv called with: " + divId);
+      // let url;
+      // switch (divId) {
+      //   case 'patientsDiv':
+      //     url = '/getPatients';
+      //     break;
+      //   case 'staffDiv':
+      //     url = '/getEmployees';
+      //     break;
+      //   case 'childrenDiv':
+      //     url = '/getChildrens';
+      //     break;
+      //   case 'wardsDiv':
+      //     url = '/getWards';
+      //     break;
+      //   case 'childbirthDiv':
+      //     url = '/getChildbirths';
+      //     break;
+      //   case 'hospDiv':
+      //     url = '/getHospitalizations';
+      //     break;
+      //   default:
+      //     return;
+      // }
+
+      // Отправка GET-запроса на сервер
+      /*fetch(url)
+              .then(response => {
+                // Здесь вы можете не обрабатывать ответ
+                // Просто отправляем запрос и ничего не делаем с ответом
+                console.log('Запрос отправлен на:', url);
+              })
+              .catch(error => {
+                console.error('Ошибка при отправке запроса:', error);
+              });*/
+      // Скрыть все div'ы
+      document.querySelectorAll('.data-div').forEach(div => {
+        div.style.display = 'none';
+      });
+
+      // Показать выбранный div
+      document.getElementById(divId).style.display = 'block';
+    }
+
+    // Обработчики для открытия модальных окон с заполнением данных
+    $('#editPatientModal').on('show.bs.modal', function (event) {
+      var button = $(event.relatedTarget);
+      var firstName = button.data('first-name');
+      var middleName = button.data('middle-name');
+      var lastName = button.data('last-name');
+      var mobilePhone = button.data('mobile-phone');
+      var address = button.data('address');
+      var id = button.data('id');
+
+      var modal = $(this);
+      modal.find('.modal-title').text('Редактировать ' + firstName + ' ' + lastName);
+      modal.find('#patientFirstName').val(firstName);
+      modal.find('#patientMiddleName').val(middleName);
+      modal.find('#patientLastName').val(lastName);
+      modal.find('#patientMobilePhone').val(mobilePhone);
+      modal.find('#patientAddress').val(address);
+      modal.find('#patientId').val(id);
+    });
+
+    $('#editHospModal').on('show.bs.modal', function (event) {
+      var button = $(event.relatedTarget);
+      var patientName = button.data('patient-name');
+      var hospData = button.data('hosp-data');
+      var hospTime = button.data('hosp-time');
+      var hospReason = button.data('hosp-reason');
+      var id = button.data('id');
+
+      var modal = $(this);
+      modal.find('.modal-title').text('Редактировать госпитализацию для ' + patientName);
+      modal.find('#hospPatientName').val(patientName);
+      modal.find('#hospData').val(hospData);
+      modal.find('#hospTime').val(hospTime);
+      modal.find('#hospReason').val(hospReason);
+      modal.find('#hospId').val(id);
+    });
+
+    $('#editChildbirthModal').on('show.bs.modal', function (event) {
+      var button = $(event.relatedTarget);
+      var patientName = button.data('patient-name');
+      var childBDate = button.data('childb-date');
+      var childBStartTime = button.data('childb-start-time');
+      var childBEndTime = button.data('childb-end-time');
+      var childBType = button.data('childb-type');
+      var childBComplications = button.data('childb-complications');
+      var id = button.data('id');
+
+      var modal = $(this);
+      modal.find('.modal-title').text('Редактировать роды для ' + patientName);
+      modal.find('#childbirthPatientName').val(patientName);
+      modal.find('#birthDate').val(childBDate);
+      modal.find('#childbirthStartTime').val(childBStartTime);
+      modal.find('#childbirthEndTime').val(childBEndTime);
+      modal.find('#childbirthType').val(childBType);
+      modal.find('#childbirthComplications').val(childBComplications);
+      modal.find('#childbirthId').val(id);
+    });
+
+    $('#editStaffModal').on('show.bs.modal', function (event) {
+      var button = $(event.relatedTarget);
+      var firstName = button.data('first-name');
+      var middleName = button.data('middle-name');
+      var lastName = button.data('last-name');
+      var mobilePhone = button.data('mobile-phone');
+      var post = button.data('post');
+      var salary = button.data('salary');
+      var id = button.data('id');
+
+      var modal = $(this);
+      modal.find('.modal-title').text('Редактировать сотрудника ' + firstName + ' ' + lastName);
+      modal.find('#staffFirstName').val(firstName);
+      modal.find('#staffMiddleName').val(middleName);
+      modal.find('#staffLastName').val(lastName);
+      modal.find('#staffMobilePhone').val(mobilePhone);
+      modal.find('#staffPost').val(post);
+      modal.find('#staffSalary').val(salary);
+      modal.find('#staffId').val(id);
+    });
+
+    $('#editChildModal').on('show.bs.modal', function (event) {
+      var button = $(event.relatedTarget);
+      var firstName = button.data('first-name');
+      var middleName = button.data('middle-name');
+      var lastName = button.data('last-name');
+      var birthDate = button.data('birth-date');
+      var height = button.data('height');
+      var weight = button.data('weight');
+      var gender = button.data('gender');
+      var pathologies = button.data('pathologies');
+      var id = button.data('id');
+
+      var modal = $(this);
+      modal.find('.modal-title').text('Редактировать ребенка ' + firstName + ' ' + lastName);
+      modal.find('#childFirstName').val(firstName);
+      modal.find('#childMiddleName').val(middleName);
+      modal.find('#childLastName').val(lastName);
+      modal.find('#childBirthDate').val(birthDate);
+      modal.find('#childHeight').val(height);
+      modal.find('#childWeight').val(weight);
+      modal.find('#childGender').val(gender);
+      modal.find('#childPathologies').val(pathologies);
+      modal.find('#childId').val(id);
+    });
+
+    $('#editWardModal').on('show.bs.modal', function (event) {
+      var button = $(event.relatedTarget);
+      var name = button.data('name');
+      var type = button.data('type');
+      var availablePlaces = button.data('available-places');
+      var equipment = button.data('equipment');
+      var id = button.data('id');
+
+      var modal = $(this);
+      modal.find('.modal-title').text('Редактировать палату ' + name);
+      modal.find('#wardName ').val(name);
+      modal.find('#wardType').val(type);
+      modal.find('#wardAvailablePlaces').val(availablePlaces);
+      modal.find('#wardEquipment').val(equipment);
+      modal.find('#wardId').val(id);
+    });
+  </script>
+
+</body>
+</html>

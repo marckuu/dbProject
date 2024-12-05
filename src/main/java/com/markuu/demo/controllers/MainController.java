@@ -33,42 +33,46 @@ public class MainController {
     private String allPatient(Model model) {
         Iterable<Patient> patient = patientRepository.findAll();
         model.addAttribute("patients", patient);
-        return "mainPage";
+        return "testmain";
     }
 
     @GetMapping("/getChildrens")
     private String allChild(Model model) {
         Iterable<Child> child = childRepository.findAll();
         model.addAttribute("childs", child);
-        return "mainPage";
+        return "testmain";
     }
 
     @GetMapping("/getChildbirths")
     private String allChildbirth(Model model) {
         Iterable<Childbirth> childbirth = childbirthRepository.findAll();
         model.addAttribute("childbirths", childbirth);
-        return "mainPage";
+        return "testmain";
     }
 
     @GetMapping("/getEmployees")
     private String allEmployee(Model model) {
         Iterable<Employee> employee = employeeRepository.findAll();
         model.addAttribute("employees", employee);
-        return "mainPage";
+        return "testmain";
     }
 
     @GetMapping("/getHospitalizations")
     private String allHospitalization(Model model) {
         Iterable<Hospitalization> hospitalization = hospitalizationRepository.findAll();
         model.addAttribute("hospitalizations", hospitalization);
-        return "mainPage";
+        return "testmain";
     }
 
     @GetMapping("/getWards")
     private String allWard(Model model) {
         Iterable<Ward> ward = wardRepository.findAll();
         model.addAttribute("wards", ward);
-        return "mainPage";
+        return "testmain";
+    }
+    @GetMapping("/")
+    private String page(Model model) {
+        return "testmain";
     }
 
 }
