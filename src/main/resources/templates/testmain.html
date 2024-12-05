@@ -14,16 +14,24 @@
 <div class="container mt-4">
   <header class="d-flex justify-content-between align-items-center mb-4">
     <div>
-      <button class="btn btn-primary" onclick="showDiv('patientsDiv')">Пациентки</button>
-      <button class="btn btn-primary" onclick="showDiv('staffDiv')">Персонал</button>
-      <button class="btn btn-primary" onclick="showDiv('childrenDiv')">Дети</button>
+      <form action="/getPatients" method="get">
+      <button type="button" class="btn btn-primary" onclick="showDiv('patientsDiv')">Пациентки</button>
+      </form>
+      <form action="/getEmployees" method="get">
+      <button type="button" class="btn btn-primary" onclick="showDiv('staffDiv')">Персонал</button>
+      </form>
+      <form action="/getChildrens" method="get">
+      <button type="button" class="btn btn-primary" onclick="showDiv('childrenDiv')">Дети</button>
+      </form>
       <form action="/getWards" method="get">
       <button type="button" class="btn btn-primary" onclick="showDiv('wardsDiv')">Палаты</button>
       </form>
       <form action="/getHospitalizations" method="get">
       <button type="button" class="btn btn-primary" onclick="showDiv('hospDiv')">Госпитализации</button>
       </form>
-      <button class="btn btn-primary" onclick="showDiv('childbirthDiv')">Роды</button>
+      <form action="/getChildbirths" method="get">
+      <button type="button" class="btn btn-primary" onclick="showDiv('childbirthDiv')">Роды</button>
+      </form>
     </div>
     <div>
       <form action="/report1" method="get" class="d-inline">
