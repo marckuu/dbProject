@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Система учета пациентов родильного дома</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div class="container mt-4">
+    <header class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <button class="btn btn-primary" onclick="showDiv('patientsDiv')">Пациентки</button>
+            <button class="btn btn-primary" onclick="showDiv('staffDiv')">Персонал</button>
+            <button class="btn btn-primary" onclick="showDiv('childrenDiv')">Дети</button>
+            <button class="btn btn-primary" onclick="showDiv('wardsDiv')">Палаты</button>
+        </div>
+        <div>
+            <form action="/report1" method="get" class="d-inline">
+                <button type="submit" class="btn btn-secondary">Отчет 1</button>
+            </form>
+            <form action="/report2" method="get" class="d-inline">
+                <button type="submit" class="btn btn-secondary">Отчет 2</button>
+            </form>
+            <form action="/report3" method="get" class="d-inline">
+                <button type="submit" class="btn btn-secondary">Отчет 3</button>
+            </form>
+        </div>
+    </header>
+
+    <div id="patientsDiv" class="data-div" style="display: none;">
+        <h3>Список пациенток</h3>
+        <ul class="list-group">
+            <li th:each="item : ${patients}" class="list-group-item d-flex justify-content-between align-items-center">
+                <span th:text="${item.name}">Имя пациентки</span> (<span th:text="${item.type}">Тип пациентки</span>)
+                <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editModal" th:data-id="${item.id}" th:data-name="${item.name}">Редактировать</button>
+            </li>
+            <li th:if="${#lists.isEmpty(patients)}" class="list-group-item">Данных нет</li>
+        </ul>
+    </div>
+
+    <div id="staffDiv" class="data-div" style="display: none;">
+        <h3>Список персонала</h3>
+        <ul class="list-group">
+            <li th:each="item : ${employees}" class="list-group-item d-flex justify-content-between align-items-center">
+                <span th:text="${item.name}">Имя сотрудника</span> (<span th:text="${item.type}">Тип сотрудника</span>)
+                <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editModal" th:data-id="${item.id}" th:data-name="${item.name}">Редактировать</button>
+            </li>
+            <li th:if="${#lists.isEmpty(staff)}" class="list-group-item">Данных нет</li>
+        </ul>
+    </div>
+
+    <div id="childrenDiv" class="data-div" style="display: none;">
+        <h3>Список детей</h3>
+        <ul class="list-group">
+            <li th:each="item : ${childs}" class="list-group-item d-flex justify-content-between align-items-center">
+                <span th:text="${item.name}">Имя ребенка</span> (<span th:text="${item.type}">Тип ребенка</span>)
+                <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editModal" th:data-id="${item.id}" th:data-name="${item.name}">Редактировать</button>
+            </li>
+            <li th:if="${#lists.isEmpty(children)}" class="list-group-item">Данных нет</li>
+        </ul>
+    </div>
+
+    <div id="wardsDiv" class="data-div" style="display: none;">
+        <h3>Список палат</h3>
+        <ul class="list-group">
+            <li th:each="item : ${wards}" class="list-group-item d-flex justify-content-between align-items-center">
+                <span th:text="${item.name}">Имя палаты</span> (<span th:text="${item.type}">Тип палаты</span>)
+                <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editModal" th:data-id="${item.id}" th:data-name="${item.name}">Редактировать</button>
+            </li>
+            <li th:if="${#lists.isEmpty(wards)}" class="list-group-item">Данных нет</li>
+        </ul>
+    </div>
+</div>
+
+<!-- Модальное окно для редактирования -->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalLabel">Редактировать</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="editForm">
+                    <div class="form-group">
+                        <label for="name">Имя</label>
+                        <input type="text" class="form-control" id="name" name="name" required>
+                    </div>
+                    <input type="hidden" id="id" name="id">
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                <button type="submit" class="btn btn-primary" form="editForm">Сохранить изменения</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function showDiv(divId) {
+        let url;
+        switch (divId) {
+            case 'patientsDiv':
+                url = '/getPatients';
+                break;
+            case 'staffDiv':
+                url = '/getEmployees';
+                break;
+            case 'childrenDiv':
+                url = '/getChildrens';
+                break;
+            case 'wardsDiv':
+                url = '/getWards';
+                break;
+            default:
+                return;
+        }
+
+        // Отправка GET-запроса на сервер
+        $.get(url, function(data) {
+            // Обновление содержимого div на основе ответа от сервера
+            $('#dataDiv').html(data);
+            $('#dataDiv').show();
+        });
+        // Скрыть все div'ы
+        document.querySelectorAll('.data-div').forEach(div => {
+            div.style.display = 'none';
+        });
+
+        // Показать выбранный div
+        document.getElementById(divId).style.display = 'block';
+    }
+
+    $('#editModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget); // Кнопка, которая вызвала модальное окно
+        var id = button.data('id'); // Извлечение информации из атрибута data-id
+        var name = button.data('name'); // Извлечение информации из атрибута data-name
+
+        var modal = $(this);
+        modal.find('.modal-title').text('Редактировать ' + name);
+        modal.find('#name').val(name);
+        modal.find('#id').val(id);
+    });
+</script>
+
+</body>
+</html>
