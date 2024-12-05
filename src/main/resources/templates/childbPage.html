@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Система учета пациентов родильного дома</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div class="container mt-4">
+  <header class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+
+      <form action="/mainPage" method="get">
+        <button type="submit" class="btn btn-primary" >Пациентки</button>
+      </form>
+
+      <form action="/childPage" method="get">
+        <button type="submit" class="btn btn-primary" >Дети</button>
+      </form>
+
+      <form action="/wardPage" method="get">
+        <button type="submit" class="btn btn-primary" >Палаты</button>
+      </form>
+
+      <form action="/hospPage" method="get">
+        <button type="submit" class="btn btn-primary" >Госпитализации</button>
+      </form>
+
+      <form action="/childbPage" method="get">
+        <button type="submit" class="btn btn-primary" >Роды</button>
+      </form>
+
+      <form action="/employeePage" method="get">
+        <button type="submit" class="btn btn-primary" >Сотрудники</button>
+      </form>
+
+    </div>
+    <div>
+      <form action="/report1" method="get" class="d-inline">
+        <button type="submit" class="btn btn-secondary">Отчет 1</button>
+      </form>
+      <form action="/report2" method="get" class="d-inline">
+        <button type="submit" class="btn btn-secondary">Отчет 2</button>
+      </form>
+      <form action="/report3" method="get" class="d-inline">
+        <button type="submit" class="btn btn-secondary">Отчет 3</button>
+      </form>
+    </div>
+  </header>
+
+  <div id="childbirthDiv" class="data-div">
+    <h3>Список Родов</h3>
+    <ul class="list-group">
+      <li th:each="item : ${childbirths}" class="list-group-item d-flex justify-content-between align-items-center">
+        <span th:text="'Пациентка: ' + ${item.patient.first_name} + ' ' + ${item.patient.middle_name} + ' ' + ${item.patient.last_name}">Имя пациентки</span>
+        <span th:text="'Дата: ' + ${item.childB_date}">Дата родов</span>
+        <span th:text="'Начало: ' + ${item.childB_start_time}">Начало родов</span>
+        <span th:text="'Конец: ' + ${item.childB_end_time}">Конец родов</span>
+        <span th:text="'Тип: ' + ${item.childB_type}">Тип родов</span>
+        <span th:text="'Осложнения: ' + ${item.childB_complications}">Осложнения</span>
+        <span th:text="'Палата: ' + ${item.ward.id}">Палата</span>
+        <span th:text="'Акушер: ' + ${item.employee.id}">Акушер</span>
+        <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editChildbirthModal"
+                th:data-id="${item.id}"
+                th:data-patient-name="${item.patient.first_name} + ' ' + ${item.patient.middle_name} + ' ' + ${item.patient.last_name}"
+                th:data-childb-date="${item.childB_date}"
+                th:data-childb-start-time="${item.childB_start_time}"
+                th:data-childb-end-time="${item.childB_end_time}"
+                th:data-childb-type="${item.childB_type}"
+                th:data-childb-complications="${item.childB_complications}"
+                th:data-childb-ward="${item.ward.id}"
+                th:data-childb-employee="${item.employee.id}">Редактировать</button>
+      </li>
+      <li th:if="${#lists.isEmpty(childbirths)}" class="list-group-item">Данных нет</li>
+    </ul>
+  </div>
+
+
+  <!-- Модальное окно для редактирования родов -->
+  <div class="modal fade" id="editChildbirthModal" tabindex="-1" role="dialog" aria-labelledby="editChildbirthModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editChildbirthModalLabel">Редактировать роды</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="editChildbirthForm">
+            <div class="form-group">
+              <label for="childbirthPatientName">Пациент</label>
+              <input type="text" class="form-control" id="childbirthPatientName" name="patientName" required readonly>
+            </div>
+            <div class="form-group">
+              <label for="birthDate">Дата</label>
+              <input type="date" class="form-control" id="birthDate" name="birthDate" required>
+            </div>
+            <div class="form-group">
+              <label for="childbirthStartTime">Начало</label>
+              <input type="time" class="form-control" id="childbirthStartTime" name="childbirthStartTime" required>
+            </div>
+            <div class="form-group">
+              <label for="childbirthEndTime">Конец</label>
+              <input type="time" class="form-control" id="childbirthEndTime" name="childbirthEndTime" required>
+            </div>
+            <div class="form-group">
+              <label for="childbirthType">Тип</label>
+              <input type="text" class="form-control" id="childbirthType" name="childbirthType" required>
+            </div>
+            <div class="form-group">
+              <label for="childbirthComplications">Осложнения</label>
+              <input type="text" class="form-control" id="childbirthComplications" name=" childbirthComplications">
+            </div>
+            <div class="form-group">
+              <label for="childbirthWard">Палата</label>
+              <input type="text" class="form-control" id="childbirthWard" name=" childbirthWard">
+            </div>
+            <div class="form-group">
+              <label for="childbirthEmployee">Акушер</label>
+              <input type="text" class="form-control" id="childbirthEmployee" name=" childbirthEmployee">
+            </div>
+            <input type="hidden" id="childbirthId" name="id">
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+          <button type="submit" class="btn btn-primary" form="editChildbirthForm">Сохранить изменения</button>
+        </div>
+      </div>
+    </div>
+    </div>
+    </div>
+
+<script>
+
+  // Обработчики для открытия модальных окон с заполнением данных
+  $('#editChildbirthModal').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget);
+    var patientName = button.data('patient-name');
+    var childBDate = button.data('childb-date');
+    var childBStartTime = button.data('childb-start-time');
+    var childBEndTime = button.data('childb-end-time');
+    var childBType = button.data('childb-type');
+    var childBComplications = button.data('childb-complications');
+    var id = button.data('id');
+    var childBWard = button.data('childb-ward');
+    var childBEmployee = button.data('childb-employee');
+
+    var modal = $(this);
+    modal.find('.modal-title').text('Редактировать роды для ' + patientName);
+    modal.find('#childbirthPatientName').val(patientName);
+    modal.find('#birthDate').val(childBDate);
+    modal.find('#childbirthStartTime').val(childBStartTime);
+    modal.find('#childbirthEndTime').val(childBEndTime);
+    modal.find('#childbirthType').val(childBType);
+    modal.find('#childbirthComplications').val(childBComplications);
+    modal.find('#childbirthId').val(id);
+    modal.find('#childbirthEmployee').val(childBEmployee);
+    modal.find('#childbirthWard').val(childBWard);
+  });
+
+
+</script>
+
+</body>
+</html>
