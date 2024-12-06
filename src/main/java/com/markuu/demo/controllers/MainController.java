@@ -3,6 +3,7 @@ package com.markuu.demo.controllers;
 import com.markuu.demo.models.*;
 import com.markuu.demo.repo.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +17,7 @@ import java.text.SimpleDateFormat;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Optional;
 
 
 @Controller
@@ -226,6 +228,27 @@ public class MainController {
         java.sql.Date sqlDate = java.sql.Date.valueOf(hospData);
         java.sql.Time sqlTime = java.sql.Time.valueOf(hospTime);
         hospitalizationRepository.set(sqlDate, sqlTime, hospReason, patientId, id);
-        return "employeePage";
+        return "hospPage";
+    }
+
+
+
+
+
+
+
+
+
+
+
+    @PostMapping("/addHosp")
+    private String addHosp(@RequestParam String Hosp_data,
+                           @RequestParam String Hosp_time,
+                           @RequestParam String Hosp_reason,
+                           @RequestParam Long patientId) {
+        java.sql.Date sqlDate = java.sql.Date.valueOf(Hosp_data);
+        java.sql.Time sqlTime = java.sql.Time.valueOf(Hosp_time);
+
+        return "hospPage";
     }
 }

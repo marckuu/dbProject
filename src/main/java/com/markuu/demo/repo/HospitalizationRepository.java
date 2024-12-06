@@ -1,6 +1,7 @@
 package com.markuu.demo.repo;
 
 import com.markuu.demo.models.Hospitalization;
+import com.markuu.demo.models.Patient;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -11,6 +12,7 @@ import javax.transaction.Transactional;
 import java.sql.Date;
 import java.sql.Time;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface HospitalizationRepository extends CrudRepository<Hospitalization, Long> {
@@ -27,5 +29,7 @@ public interface HospitalizationRepository extends CrudRepository<Hospitalizatio
              @Param("Hosp_reason") String Hosp_reason,
              @Param("patientId") Long patientId,
              @Param("id") Long id);
+
+
 
 }
