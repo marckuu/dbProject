@@ -1,6 +1,7 @@
 package com.markuu.demo.models;
 
 import javax.persistence.*;
+import java.sql.Date;
 
 @Entity
 public class Child {
@@ -36,11 +37,11 @@ public class Child {
         this.last_name = last_name;
     }
 
-    public String getBirth_date() {
+    public Date getBirth_date() {
         return birth_date;
     }
 
-    public void setBirth_date(String birth_date) {
+    public void setBirth_date(Date birth_date) {
         this.birth_date = birth_date;
     }
 
@@ -99,8 +100,7 @@ public class Child {
     @Column(length = 50, nullable = false)
     private String first_name, middle_name, last_name;
 
-    @Column(columnDefinition = "DATE", nullable = false)
-    private String birth_date;
+    private Date birth_date;
 
     private int height;
 

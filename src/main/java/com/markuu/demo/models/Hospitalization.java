@@ -1,6 +1,9 @@
 package com.markuu.demo.models;
 
 import javax.persistence.*;
+import javax.xml.crypto.Data;
+import java.sql.Date;
+import java.sql.Time;
 
 @Entity
 public class Hospitalization {
@@ -12,19 +15,19 @@ public class Hospitalization {
         this.id = id;
     }
 
-    public String getHosp_data() {
+    public Date getHosp_data() {
         return Hosp_data;
     }
 
-    public void setHosp_data(String hosp_data) {
+    public void setHosp_data(Date hosp_data) {
         Hosp_data = hosp_data;
     }
 
-    public String getHosp_time() {
+    public Time getHosp_time() {
         return Hosp_time;
     }
 
-    public void setHosp_time(String hosp_time) {
+    public void setHosp_time(Time hosp_time) {
         Hosp_time = hosp_time;
     }
 
@@ -48,11 +51,9 @@ public class Hospitalization {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(columnDefinition = "DATE", nullable = false)
-    private String Hosp_data;
+    private Date Hosp_data;
 
-    @Column(columnDefinition = "TIME", nullable = false)
-    private String Hosp_time;
+    private Time Hosp_time;
 
     @Column(length = 20, nullable = false)
     private String Hosp_reason;

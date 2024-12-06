@@ -1,6 +1,8 @@
 package com.markuu.demo.models;
 
 import javax.persistence.*;
+import java.sql.Date;
+import java.sql.Time;
 
 @Entity
 public class Childbirth {
@@ -12,27 +14,27 @@ public class Childbirth {
         this.id = id;
     }
 
-    public String getChildB_date() {
+    public Date getChildB_date() {
         return childB_date;
     }
 
-    public void setChildB_date(String childB_date) {
+    public void setChildB_date(Date childB_date) {
         this.childB_date = childB_date;
     }
 
-    public String getChildB_start_time() {
+    public Time getChildB_start_time() {
         return childB_start_time;
     }
 
-    public void setChildB_start_time(String childB_start_time) {
+    public void setChildB_start_time(Time childB_start_time) {
         this.childB_start_time = childB_start_time;
     }
 
-    public String getChildB_end_time() {
+    public Time getChildB_end_time() {
         return childB_end_time;
     }
 
-    public void setChildB_end_time(String childB_end_time) {
+    public void setChildB_end_time(Time childB_end_time) {
         this.childB_end_time = childB_end_time;
     }
 
@@ -80,14 +82,11 @@ public class Childbirth {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(columnDefinition = "DATE", nullable = false)
-    private String childB_date;
+    private Date childB_date;
 
-    @Column(columnDefinition = "TIME", nullable = false)
-    private String childB_start_time;
+    private Time childB_start_time;
 
-    @Column(columnDefinition = "TIME")
-    private String childB_end_time;
+    private Time childB_end_time;
 
     @Column(length = 50, nullable = false)
     private String childB_type;

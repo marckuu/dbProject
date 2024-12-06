@@ -1,5 +1,6 @@
 package com.markuu.demo.models;
 import javax.persistence.*;
+import java.sql.Date;
 import java.util.List;
 
 @Entity
@@ -52,11 +53,11 @@ public class Patient {
         this.mobile_phone = mobile_phone;
     }
 
-    public String getBirth_date() {
+    public Date getBirth_date() {
         return birth_date;
     }
 
-    public void setBirth_date(String birth_date) {
+    public void setBirth_date(Date birth_date) {
         this.birth_date = birth_date;
     }
 
@@ -121,8 +122,7 @@ public class Patient {
     @Column(length = 12)
     private String mobile_phone;
 
-    @Column(columnDefinition = "DATE", nullable = false)
-    private String birth_date;
+    private Date birth_date;
 
     @Column(length = 2, nullable = false)
     private String blood_type;

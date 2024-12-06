@@ -85,7 +85,7 @@
           </button>
         </div>
         <div class="modal-body">
-          <form id="editWardForm">
+          <form id="editWardForm" action="/modifyWard" method="post">
             <div class="form-group">
               <label for="wardType">Тип палаты</label>
               <input type="text" class="form-control" id="wardType" name="type" required>
@@ -120,7 +120,8 @@
     var id = button.data('id');
 
     var modal = $(this);
-    modal.find('.modal-title').text('Редактировать палату ' + id);
+    modal.find('.modal-title').text('Редактировать ' + id);
+    modal.find('#wardId').val(id);
     modal.find('#wardType').val(type);
     modal.find('#wardAvailablePlaces').val(availablePlaces);
     modal.find('#wardEquipment').val(equipment);

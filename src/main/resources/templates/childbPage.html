@@ -67,7 +67,8 @@
         <span th:text="'Акушер: ' + ${item.employee.id}">Акушер</span>
         <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editChildbirthModal"
                 th:data-id="${item.id}"
-                th:data-patient-name="${item.patient.first_name} + ' ' + ${item.patient.middle_name} + ' ' + ${item.patient.last_name}"
+                th:data-patient="${item.patient.id}"
+                th:data-patientName="${item.patient.first_name}"
                 th:data-childb-date="${item.childB_date}"
                 th:data-childb-start-time="${item.childB_start_time}"
                 th:data-childb-end-time="${item.childB_end_time}"
@@ -92,10 +93,10 @@
           </button>
         </div>
         <div class="modal-body">
-          <form id="editChildbirthForm">
+          <form id="editChildbirthForm" action="/modifyChildb" method="post">
             <div class="form-group">
-              <label for="childbirthPatientName">Пациент</label>
-              <input type="text" class="form-control" id="childbirthPatientName" name="patientName" required readonly>
+              <label for="patientid">Пациент</label>
+              <input type="text" class="form-control" id="patientid" name="patient" required >
             </div>
             <div class="form-group">
               <label for="birthDate">Дата</label>
@@ -115,15 +116,15 @@
             </div>
             <div class="form-group">
               <label for="childbirthComplications">Осложнения</label>
-              <input type="text" class="form-control" id="childbirthComplications" name=" childbirthComplications">
+              <input type="text" class="form-control" id="childbirthComplications" name="complications">
             </div>
             <div class="form-group">
               <label for="childbirthWard">Палата</label>
-              <input type="text" class="form-control" id="childbirthWard" name=" childbirthWard">
+              <input type="text" class="form-control" id="childbirthWard" name="ward">
             </div>
             <div class="form-group">
               <label for="childbirthEmployee">Акушер</label>
-              <input type="text" class="form-control" id="childbirthEmployee" name=" childbirthEmployee">
+              <input type="text" class="form-control" id="childbirthEmployee" name="employee">
             </div>
             <input type="hidden" id="childbirthId" name="id">
           </form>
@@ -142,7 +143,8 @@
   // Обработчики для открытия модальных окон с заполнением данных
   $('#editChildbirthModal').on('show.bs.modal', function (event) {
     var button = $(event.relatedTarget);
-    var patientName = button.data('patient-name');
+    var patient = button.data('patient');
+    var patientName = button.data('patientName');
     var childBDate = button.data('childb-date');
     var childBStartTime = button.data('childb-start-time');
     var childBEndTime = button.data('childb-end-time');
@@ -154,7 +156,6 @@
 
     var modal = $(this);
     modal.find('.modal-title').text('Редактировать роды для ' + patientName);
-    modal.find('#childbirthPatientName').val(patientName);
     modal.find('#birthDate').val(childBDate);
     modal.find('#childbirthStartTime').val(childBStartTime);
     modal.find('#childbirthEndTime').val(childBEndTime);
@@ -163,6 +164,7 @@
     modal.find('#childbirthId').val(id);
     modal.find('#childbirthEmployee').val(childBEmployee);
     modal.find('#childbirthWard').val(childBWard);
+    modal.find('#patientid').val(patient);
   });
 
 

@@ -67,6 +67,7 @@
         <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editHospModal"
                 th:data-id="${item.id}"
                 th:data-patient-name="${item.patient.first_name} + ' ' + ${item.patient.middle_name} + ' ' + ${item.patient.last_name}"
+                th:data-patient-id="${item.patient.id}"
                 th:data-hosp-data="${item.hosp_data}"
                 th:data-hosp-time="${item.hosp_time}"
                 th:data-hosp-reason="${item.hosp_reason}">Редактировать</button>
@@ -87,10 +88,10 @@
           </button>
         </div>
         <div class="modal-body">
-          <form id="editHospForm">
+          <form id="editHospForm" action="/modifyHosp" method="post">
             <div class="form-group">
-              <label for="hospPatientName">Пациент</label>
-              <input type="text" class="form-control" id="hospPatientName" name="patientName" required readonly>
+              <label for="hospPatientId">Пациент</label>
+              <input type="text" class="form-control" id="hospPatientId" name="patientId" required readonly>
             </div>
             <div class="form-group">
               <label for="hospData">Дата</label>
@@ -122,6 +123,7 @@
   $('#editHospModal').on('show.bs.modal', function (event) {
     var button = $(event.relatedTarget);
     var patientName = button.data('patient-name');
+    var patientId = button.data('patient-id');
     var hospData = button.data('hosp-data');
     var hospTime = button.data('hosp-time');
     var hospReason = button.data('hosp-reason');
@@ -129,7 +131,7 @@
 
     var modal = $(this);
     modal.find('.modal-title').text('Редактировать госпитализацию для ' + patientName);
-    modal.find('#hospPatientName').val(patientName);
+    modal.find('#hospPatientId').val(patientId);
     modal.find('#hospData').val(hospData);
     modal.find('#hospTime').val(hospTime);
     modal.find('#hospReason').val(hospReason);

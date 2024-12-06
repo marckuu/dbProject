@@ -1,6 +1,7 @@
 package com.markuu.demo.models;
 
 import javax.persistence.*;
+import java.sql.Date;
 import java.util.List;
 
 @Entity
@@ -53,12 +54,12 @@ public class Employee {
         this.post = post;
     }
 
-    public String getFirst_job_day() {
-        return first_job_day;
+    public Date getExperience() {
+        return experience;
     }
 
-    public void setFirst_job_day(String first_job_day) {
-        this.first_job_day = first_job_day;
+    public void setFirst_job_day(Date experience) {
+        this.experience = experience;
     }
 
     public int getSalary() {
@@ -105,8 +106,7 @@ public class Employee {
 
     private String post;
 
-    @Column(columnDefinition = "DATE")
-    private String first_job_day;
+    private Date experience;
 
     private int salary;
 

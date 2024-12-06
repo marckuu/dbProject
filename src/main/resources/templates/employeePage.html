@@ -62,7 +62,7 @@
       <li th:each="item : ${employees}" class="list-group-item d-flex justify-content-between align-items-center">
         <span th:text="'Сотрудник: ' + ${item.first_name} + ' ' + ${item.middle_name} + ' ' + ${item.last_name}">Имя сотрудника</span>
         <span th:text="'Должность: ' + ${item.post}">Должность</span>
-        <span th:text="'Стаж: ' + ${item.first_job_day}">Стаж</span>
+        <span th:text="'Стаж: ' + ${item.experience}">Стаж</span>
         <span th:text="'Телефон: ' + ${item.mobile_phone}">Телефон</span>
         <span th:text="'Зарплата: ' + ${item.salary}">Зарплата</span>
         <span th:text="'График: ' + ${item.work_schedule}">График</span>
@@ -76,7 +76,7 @@
                 th:data-mobile-phone="${item.mobile_phone}"
                 th:data-post="${item.post}"
                 th:data-salary="${item.salary}"
-                th:data-first-job-day="${item.first_job_day}"
+                th:data-first-job-day="${item.experience}"
                 th:data-schedule="${item.work_schedule}"
                 th:data-skills="${item.skills}">Редактировать</button>
       </li>
@@ -96,7 +96,7 @@
           </button>
         </div>
         <div class="modal-body">
-          <form id="editStaffForm">
+          <form id="editStaffForm" action="/modifyEmployee" method="post">
             <div class="form-group">
               <label for="staffFirstName">Имя</label>
               <input type="text" class="form-control" id="staffFirstName" name="firstName" required>
@@ -123,15 +123,15 @@
             </div>
             <div class="form-group">
               <label for="staffExperience">Стаж</label>
-              <input type="number" class="form-control" id="staffExperience" name="experience" required>
+              <input type="date" class="form-control" id="staffExperience" name="staffExperience" required>
             </div>
             <div class="form-group">
               <label for="staffSchedule">График</label>
-              <input type="number" class="form-control" id="staffSchedule" name="schedule" required>
+              <input type="text" class="form-control" id="staffSchedule" name="staffSchedule" required>
             </div>
             <div class="form-group">
               <label for="staffSkills">Навыки</label>
-              <input type="number" class="form-control" id="staffSkills" name="skills" required>
+              <input type="text" class="form-control" id="staffSkills" name="staffSkills" required>
             </div>
             <input type="hidden" id="staffId" name="id">
           </form>
@@ -148,33 +148,31 @@
 <script>
 
   // Обработчики для открытия модальных окон с заполнением данных
-  $('#editChildModal').on('show.bs.modal', function (event) {
+  $('#editStaffModal').on('show.bs.modal', function (event) {
     var button = $(event.relatedTarget);
     var firstName = button.data('first-name');
     var middleName = button.data('middle-name');
     var lastName = button.data('last-name');
-    var birthDate = button.data('birth-date');
-    var height = button.data('height');
-    var weight = button.data('weight');
-    var gender = button.data('gender');
-    var pathologies = button.data('pathologies');
+    var mobilePhone = button.data('mobile-phone');
+    var post = button.data('post');
+    var salary = button.data('salary');
     var id = button.data('id');
-    var mother = button.data('patient-id');
-    var ward = button.data('ward');
+    var exp = button.data('experience');
+    var schedule = button.data('schedule');
+    var skills = button.data('skills');
 
     var modal = $(this);
-    modal.find('.modal-title').text('Редактировать ребенка ' + firstName + ' ' + lastName);
-    modal.find('#childFirstName').val(firstName);
-    modal.find('#childMiddleName').val(middleName);
-    modal.find('#childLastName').val(lastName);
-    modal.find('#childBirthDate').val(birthDate);
-    modal.find('#childHeight').val(height);
-    modal.find('#childWeight').val(weight);
-    modal.find('#childGender').val(gender);
-    modal.find('#childPathologies').val(pathologies);
-    modal.find('#childId').val(id);
-    modal.find('#childMother').val(mother);
-    modal.find('#childWard').val(ward);
+    modal.find('.modal-title').text('Редактировать сотрудника ' + firstName + ' ' + lastName);
+    modal.find('#staffFirstName').val(firstName);
+    modal.find('#staffMiddleName').val(middleName);
+    modal.find('#staffLastName').val(lastName);
+    modal.find('#staffMobilePhone').val(mobilePhone);
+    modal.find('#staffPost').val(post);
+    modal.find('#staffSalary').val(salary);
+    modal.find('#staffId').val(id);
+    modal.find('#staffExperience').val(exp);
+    modal.find('#staffSchedule').val(schedule);
+    modal.find('#staffSkills').val(skills);
   });
 
 
