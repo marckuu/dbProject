@@ -118,7 +118,7 @@
   </div>
 
   <!-- Модальное окно для ДОБАВЛЕНИЯ госпитализаций -->
-  <div class="modal fade" id="editAddModal" tabindex="-1" role="dialog" aria-labelledby="editHospModalLabel" aria-hidden="true">
+  <div class="modal fade" id="editAddModal" tabindex="-1" role="dialog" aria-labelledby="addHospModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -128,29 +128,28 @@
           </button>
         </div>
         <div class="modal-body">
-          <form action="/modifyHosp" method="post">
+          <form id="addHospForm" action="/addHosp" method="post">
             <div class="form-group">
-              <label for="hospPatientId">Пациент</label>
-              <input type="text" class="form-control" name="patientId" required readonly>
+              <label for="pId">Пациент</label>
+              <input type="number" class="form-control" id="pId" name="pId" required>
             </div>
             <div class="form-group">
-              <label for="hospData">Дата</label>
-              <input type="date" class="form-control" name="hospData" required>
+              <label for="hData">Дата</label>
+              <input type="date" class="form-control" id="hData" name="hData" required>
             </div>
             <div class="form-group">
-              <label for="hospTime">Время</label>
-              <input type="time" class="form-control" name="hospTime" required>
+              <label for="hTime">Время</label>
+              <input type="time" class="form-control" id="hTime" name="hTime" required>
             </div>
             <div class="form-group">
-              <label for="hospReason">Причина</label>
-              <input type="text" class="form-control" name="hospReason" required>
+              <label for="hReason">Причина</label>
+              <input type="text" class="form-control" id="hReason"  name="hReason" required>
             </div>
-            <input type="hidden" name="id">
           </form>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
-          <button type="submit" class="btn btn-primary" form="editHospForm">Сохранить изменения</button>
+          <button type="submit" class="btn btn-primary" form="addHospForm">Сохранить изменения</button>
         </div>
       </div>
     </div>
@@ -180,6 +179,11 @@
 
   $('#editAddModal').on('show.bs.modal', function (event) {
     var modal = $(this);
+    modal.find('.modal-title').text('Добавить госпитализацию');
+    modal.find('#hData');
+    modal.find('#hTime');
+    modal.find('#hReason');
+    modal.find('#pId');
   });
 
 

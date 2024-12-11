@@ -86,11 +86,11 @@ public class Patient {
     }
 
     public Hospitalization getHospitalization() {
-        return hospitalization;
+        return (Hospitalization) hospitalization;
     }
 
     public void setHospitalization(Hospitalization hospitalization) {
-        this.hospitalization = hospitalization;
+        this.hospitalization = (List<Hospitalization>) hospitalization;
     }
 
     public List<Childbirth> getChildbirths() {
@@ -135,8 +135,8 @@ public class Patient {
     private Ward ward;
 
     // Создается метка для использования id как внешнего ключа в Hospitalization
-    @OneToOne(mappedBy = "patient", cascade = CascadeType.ALL)
-    private Hospitalization hospitalization;
+    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
+    private List<Hospitalization> hospitalization;
 
     // Создается список родов и метка для получения ключа в childbirth
     @OneToMany(mappedBy = "patient")

@@ -32,4 +32,13 @@ public interface HospitalizationRepository extends CrudRepository<Hospitalizatio
 
 
 
+    @Modifying
+    @Transactional
+    @Query(value = "INSERT INTO Hospitalization (id, Hosp_data, Hosp_time, Hosp_reason, patient_id) " +
+            "VALUES (:id, :Hosp_data, :Hosp_time, :Hosp_reason, :patientId)", nativeQuery = true)
+    void addHospitalization(@Param("Hosp_data") Date hospData,
+                            @Param("Hosp_time") Time hospTime,
+                            @Param("Hosp_reason") String hospReason,
+                            @Param("patientId") Long patientId,
+                            @Param("id") Long id);
 }

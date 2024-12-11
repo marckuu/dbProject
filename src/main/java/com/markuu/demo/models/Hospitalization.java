@@ -59,7 +59,7 @@ public class Hospitalization {
     private String Hosp_reason;
 
     // Подключается столбец id из patients
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "patient_id")
     private Patient patient;
 

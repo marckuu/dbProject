@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.persistence.Tuple;
 import java.security.SecureRandom;
 import java.sql.Time;
 import java.text.ParseException;
@@ -17,6 +18,9 @@ import java.text.SimpleDateFormat;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -40,6 +44,9 @@ public class MainController {
 
     @Autowired
     private EmployeeRepository employeeRepository;
+
+    @Autowired
+    private ReportsRepository reportsRepository;
 
 
     @GetMapping("/getPatients")
@@ -192,6 +199,12 @@ public class MainController {
                                 Model model,
                                 @RequestParam Long id) throws ParseException {
         java.sql.Date sqlDate = java.sql.Date.valueOf(birthDate);
+        if (childbirthStartTime.length() == 5) { // hh:mm
+            childbirthStartTime += ":00"; // добавляем секунды
+        }
+        if (childbirthEndTime.length() == 5) { // hh:mm
+            childbirthEndTime += ":00"; // добавляем секунды
+        }
         java.sql.Time sqlStartTime = java.sql.Time.valueOf(childbirthStartTime);
         java.sql.Time sqlEndTime = java.sql.Time.valueOf(childbirthEndTime);
         childbirthRepository.set(sqlDate, sqlStartTime, sqlEndTime, childbirthType, complications, ward,
@@ -226,6 +239,9 @@ public class MainController {
                                   Model model,
                                   @RequestParam Long id) throws ParseException {
         java.sql.Date sqlDate = java.sql.Date.valueOf(hospData);
+        if (hospTime.length() == 5) { // hh:mm
+            hospTime += ":00"; // добавляем секунды
+        }
         java.sql.Time sqlTime = java.sql.Time.valueOf(hospTime);
         hospitalizationRepository.set(sqlDate, sqlTime, hospReason, patientId, id);
         return "hospPage";
@@ -236,19 +252,46 @@ public class MainController {
 
 
 
-
-
+Long hospId = 2L;
 
 
 
     @PostMapping("/addHosp")
-    private String addHosp(@RequestParam String Hosp_data,
-                           @RequestParam String Hosp_time,
-                           @RequestParam String Hosp_reason,
-                           @RequestParam Long patientId) {
-        java.sql.Date sqlDate = java.sql.Date.valueOf(Hosp_data);
-        java.sql.Time sqlTime = java.sql.Time.valueOf(Hosp_time);
-
+    private String addHosp(@RequestParam String hData,
+                           @RequestParam String hTime,
+                           @RequestParam String hReason,
+                           @RequestParam Long pId
+                           ) {
+        java.sql.Date sqlDate = java.sql.Date.valueOf(hData);
+        LocalTime localTime = LocalTime.parse(hTime + ":00", DateTimeFormatter.ofPattern("HH:mm:ss"));
+        java.sql.Time sqlTime = java.sql.Time.valueOf(localTime);
+        hospitalizationRepository.addHospitalization(sqlDate, sqlTime, hReason, pId, hospId);
+        hospId++;
         return "hospPage";
     }
+
+
+
+
+    @GetMapping("/toReport1")
+    private String toReport1(Model model) {
+        List<Tuple > reportDataTuples = reportsRepository.report1();
+        List<ReportData> reportData = new ArrayList<>();
+
+        for (Tuple tuple : reportDataTuples) {
+            ReportData data = new ReportData();
+            data.setFirstName(tuple.get(0, String.class));
+            data.setSecondName(tuple.get(1, String.class));
+            data.setLastName(tuple.get(2, String.class));
+            data.setHosp_data(tuple.get(3, Date.class));
+            data.setBirth_date(tuple.get(4, Date.class));
+            data.setPathologies(tuple.get(5, String.class));
+            data.setChildbType(tuple.get(6, String.class));
+            reportData.add(data);
+        }
+
+        model.addAttribute("reportData", reportData);
+        return "report1";
+    }
+
 }

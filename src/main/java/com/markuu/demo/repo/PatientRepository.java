@@ -32,6 +32,8 @@ public interface PatientRepository extends CrudRepository<Patient, Long> {
     void set(@Param("first_name") String first_name, @Param("middle_name") String middle_name, @Param("last_name") String last_name, @Param("address") String address,
              @Param("mobile_phone") String mobile_phone, @Param("birth_date") Date birth_date, @Param("blood_type") String blood_type, @Param("medical_history") String medical_history,
              @Param("ward") Long ward, @Param("id") Long id);
+
+
 }
 
 
