@@ -1,9 +1,12 @@
 package com.markuu.demo.controllers;
 
+import com.markuu.demo.dto.Report2AdminData;
+import com.markuu.demo.dto.Report2Data;
+import com.markuu.demo.dto.ReportData;
+import com.markuu.demo.dto.UserMainPageData;
 import com.markuu.demo.models.*;
 import com.markuu.demo.repo.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,17 +14,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.persistence.Tuple;
-import java.security.SecureRandom;
+import java.math.BigInteger;
 import java.sql.Time;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.sql.Date;
-import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 
 @Controller
@@ -92,7 +92,7 @@ public class MainController {
     }
     @GetMapping("/")
     private String page(Model model) {
-        return "mainPage";
+        return "usersPage";
     }
 
     @GetMapping("/mainPage")
@@ -293,5 +293,60 @@ Long hospId = 2L;
         model.addAttribute("reportData", reportData);
         return "report1";
     }
+
+
+    @GetMapping("/toAdminPage")
+    private String toAdminPage(Model model) {
+        return "mainPage";
+    }
+
+    @GetMapping("/toUserMainPage")
+    private String toUserMainPage(Model model) {
+        List<Tuple > reportDataTuples = reportsRepository.userPageInfo();
+        List<UserMainPageData> UserMainPageData = new ArrayList<>();
+
+        for (Tuple tuple : reportDataTuples) {
+            UserMainPageData data = new UserMainPageData();
+            data.setChildbDate(tuple.get(0, Date.class));
+            data.setChildbStartTime(tuple.get(1, Time.class));
+            data.setChildbEndTime(tuple.get(2, Time.class));
+            data.setChildbType(tuple.get(3, String.class));
+            data.setPathologies(tuple.get(4, String.class));
+            data.setWardId(tuple.get(5, BigInteger.class));
+            data.setPatientFirstName(tuple.get(6, String.class));
+            data.setPatientSecondName(tuple.get(7, String.class));
+            data.setPatientLastName(tuple.get(8, String.class));
+            data.setEmployeeFirstName(tuple.get(9, String.class));
+            data.setEmployeeSecondName(tuple.get(10, String.class));
+            data.setEmployeeLastName(tuple.get(11, String.class));
+            data.setEmployeePost(tuple.get(12, String.class));
+            UserMainPageData.add(data);
+        }
+
+        model.addAttribute("UserMainPageData", UserMainPageData);
+        return "userMainPage";
+    }
+
+
+    @GetMapping("/toAdminReport2")
+    private String toReport2Admin(Model model) {
+        List<Tuple > reportDataTuples = reportsRepository.report2Admin();
+        List<Report2AdminData> reportData = new ArrayList<>();
+
+        for (Tuple tuple : reportDataTuples) {
+            Report2AdminData data = new Report2AdminData();
+            data.setFirstName(tuple.get(0, String.class));
+            data.setPatientId(tuple.get(1, BigInteger.class));
+            data.setChildbType(tuple.get(2, String.class));
+            data.setPathologies(tuple.get(3, String.class));
+            data.setExperience(tuple.get(4, Date.class));
+            data.setSkills(tuple.get(5, String.class));
+            reportData.add(data);
+        }
+
+        model.addAttribute("report2AdminData", reportData);
+        return "report2Admin";
+    }
+
 
 }

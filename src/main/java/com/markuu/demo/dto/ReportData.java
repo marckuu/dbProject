@@ -1,4 +1,4 @@
-package com.markuu.demo.models;
+package com.markuu.demo.dto;
 
 import java.sql.Date;
 
