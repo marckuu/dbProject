@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Система учета пациентов родильного дома</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div class="container-fluid mt-4">
+    <header class="d-flex justify-content-between align-items-center mb-4">
+        <form action="/toReport2" method="get" class="d-inline">
+            <button type="submit" class="btn btn-secondary">Отчет</button>
+        </form>
+    </header>
+
+    <div id="reportDiv" class="data-div mt-4">
+        <h3>Информация о родах</h3>
+
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th>Имя пациентки</th>
+                <th>Фамилия пациентки</th>
+                <th>Отчество пациентки</th>
+                <th>Дата родов</th>
+                <th>Время начала родов</th>
+                <th>Время окончания родов</th>
+                <th>Вид родов</th>
+                <th>Осложнения при родах</th>
+                <th>Номер палаты</th>
+                <th>Имя сотрудника</th>
+                <th>Фамилия сотрудника</th>
+                <th>Отчество сотрудника</th>
+                <th>Должность сотрудника</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="reportItem : ${UserMainPageData}">
+                <td th:text="${reportItem.patientFirstName}"></td>
+                <td th:text="${reportItem.patientSecondName}"></td>
+                <td th:text="${reportItem.patientLastName}"></td>
+                <td th:text="${reportItem.childbDate}"></td>
+                <td th:text="${reportItem.childbStartTime}"></td>
+                <td th:text="${reportItem.childbEndTime}"></td>
+                <td th:text="${reportItem.childbType}"></td>
+                <td th:text="${reportItem.pathologies}"></td>
+                <td th:text="${reportItem.wardId}"></td>
+                <td th:text="${reportItem.employeeFirstName}"></td>
+                <td th:text="${reportItem.employeeSecondName}"></td>
+                <td th:text="${reportItem.employeeLastName}"></td>
+                <td th:text="${reportItem.employeePost}"></td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(reportData)}">
+                <td colspan="8" class="text-center">Данных нет</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+</body>
+</html>

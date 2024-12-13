@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Выбор роли</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+
+        .container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .button {
+            width: 200px;
+            height: 50px;
+            font-size: 24px;
+            margin: 20px;
+            border: none;
+            border-radius: 10px;
+            background-color: darkslategrey;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            background-color: slategrey;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <form action="/toAdminPage" method="get" ><button class="button">Администратор</button></form>
+    <form action="/toUserMainPage" method="get" ><button class="button">Сотрудник</button></form>
+</div>
+</body>
+</html>
