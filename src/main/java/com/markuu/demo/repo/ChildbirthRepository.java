@@ -38,4 +38,19 @@ public interface ChildbirthRepository extends CrudRepository<Childbirth, Long> {
              @RequestParam Long patient,
              @RequestParam Long id);
 
+
+    @Modifying
+    @Transactional
+    @Query(value = "INSERT INTO Childbirth (id, childb_date, childb_start_time, childb_end_time, childb_type, childb_complications, ward_id, patient_id, employee_id) " +
+            "VALUES (:id, :childb_date, :childb_start_time, :childb_end_time, :childb_type, :childb_complications, :ward_id, :patient_id, :employee_id)", nativeQuery = true)
+    void addChildb(@Param("id") Long id,
+                    @Param("childb_date") Date childb_date,
+                    @Param("childb_start_time") Time childb_start_time,
+                    @Param("childb_end_time") Time childb_end_time,
+                    @Param("childb_type") String childb_type,
+                    @Param("childb_complications") String childb_complications,
+                    @Param("ward_id") Long ward_id,
+                    @Param("patient_id") Long patient_id,
+                    @Param("employee_id") Long employee_id);
+
 }

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.transaction.Transactional;
 import java.sql.Date;
+import java.sql.Time;
 import java.util.List;
 
 @Repository
@@ -36,6 +37,23 @@ public interface ChildRepository extends CrudRepository<Child, Long> {
              @RequestParam Date birthDate,
              @RequestParam Long mother,
              @RequestParam Long id);
+
+
+    @Modifying
+    @Transactional
+    @Query(value = "INSERT INTO Child (id, first_name, middle_name, last_name, birth_date, height, weight, gender, pathologies, patient_id, ward_id)" +
+            "VALUES (:id, :first_name, :middle_name, :last_name, :birth_date, :height, :weight, :gender, :pathologies, :patient_id, :ward_id)", nativeQuery = true)
+    void addChild(@Param("id") Long id,
+                   @Param("first_name") String first_name,
+                   @Param("middle_name") String middle_name,
+                   @Param("last_name") String last_name,
+                   @Param("birth_date") Date birth_date,
+                   @Param("height") Integer height,
+                   @Param("weight") Integer weight,
+                   @Param("gender") String gender,
+                   @Param("pathologies") String pathologies,
+                   @Param("patient_id") Long patient_id,
+                   @Param("ward_id") Long ward_id);
 
 }
 

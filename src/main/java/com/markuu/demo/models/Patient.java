@@ -139,11 +139,11 @@ public class Patient {
     private List<Hospitalization> hospitalization;
 
     // Создается список родов и метка для получения ключа в childbirth
-    @OneToMany(mappedBy = "patient")
+    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
     private List<Childbirth> childbirths;
 
     // Создается список детей и метка для получения ключа в child
-    @OneToMany(mappedBy = "patient")
+    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
     private List<Child> child;
 }
 

@@ -7,6 +7,7 @@ import com.markuu.demo.dto.UserMainPageData;
 import com.markuu.demo.models.*;
 import com.markuu.demo.repo.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -253,7 +254,11 @@ public class MainController {
 
 
 Long hospId = 2L;
-
+Long patientId = 2L;
+Long wardId = 3L;
+Long childbId = 3L;
+Long childId = 3L;
+Long employeeId = 3L;
 
 
     @PostMapping("/addHosp")
@@ -270,6 +275,90 @@ Long hospId = 2L;
         return "hospPage";
     }
 
+
+    @PostMapping("/addPatient")
+    private String addPatient(
+                              @RequestParam String first_name,
+                              @RequestParam String middle_name,
+                              @RequestParam String last_name,
+                              @RequestParam String address,
+                              @RequestParam String mobile_phone,
+                              @RequestParam String birth_date,
+                              @RequestParam String blood_type,
+                              @RequestParam String medical_history,
+                              @RequestParam Long ward_id
+    ) {
+        java.sql.Date sqlDate = java.sql.Date.valueOf(birth_date);
+        patientRepository.addPatient(patientId, first_name, middle_name, last_name, address, mobile_phone, sqlDate, blood_type, medical_history, ward_id);
+        patientId++;
+        return "mainPage";
+    }
+
+    @PostMapping("/addWard")
+    private String addWard(
+            @RequestParam Integer available_places,
+            @RequestParam String wType,
+            @RequestParam String equipment
+    ) {
+        wardRepository.addWard(wardId, available_places, wType, equipment);
+        wardId++;
+        return "wardPage";
+    }
+
+    @PostMapping("/addChildb")
+    private String addChildb(@RequestParam String childb_date,
+                             @RequestParam String childb_start_time,
+                             @RequestParam String childb_end_time,
+                             @RequestParam String childb_type,
+                             @RequestParam String childb_complications,
+                             @RequestParam Long ward_id,
+                             @RequestParam Long patient_id,
+                             @RequestParam Long employee_id
+    ) {
+        java.sql.Date sqlDate = java.sql.Date.valueOf(childb_date);
+        LocalTime localStartTime = LocalTime.parse(childb_start_time + ":00", DateTimeFormatter.ofPattern("HH:mm:ss"));
+        java.sql.Time sqlStartTime = java.sql.Time.valueOf(localStartTime);
+        LocalTime localEndTime = LocalTime.parse(childb_end_time + ":00", DateTimeFormatter.ofPattern("HH:mm:ss"));
+        java.sql.Time sqlEndTime = java.sql.Time.valueOf(localEndTime);
+        childbirthRepository.addChildb(childbId, sqlDate, sqlStartTime, sqlEndTime, childb_type, childb_complications, ward_id, patient_id, employee_id);
+        childbId++;
+        return "mainPage";
+    }
+
+    @PostMapping("/addChild")
+    private String addChild(@RequestParam String first_name,
+                            @RequestParam String middle_name,
+                            @RequestParam String last_name,
+                            @RequestParam String birth_date,
+                            @RequestParam Integer height,
+                            @RequestParam Integer weight,
+                            @RequestParam String gender,
+                            @RequestParam String pathologies,
+                            @RequestParam Long patient_id,
+                            @RequestParam Long ward_id
+    ) {
+        java.sql.Date sqlDate = java.sql.Date.valueOf(birth_date);
+        childRepository.addChild(childId, first_name, middle_name, last_name, sqlDate, height, weight, gender, pathologies, patient_id, ward_id);
+        childId++;
+        return "childPage";
+    }
+
+    @PostMapping("/addEmployee")
+    private String addEmployee(@RequestParam String first_name,
+                               @RequestParam String middle_name,
+                               @RequestParam String last_name,
+                               @RequestParam String mobile_phone,
+                               @RequestParam String post,
+                               @RequestParam String experience,
+                               @RequestParam Integer salary,
+                               @RequestParam String work_shedule,
+                               @RequestParam String skills
+    ) {
+        java.sql.Date sqlDate = java.sql.Date.valueOf(experience);
+        employeeRepository.addEmployee(employeeId, first_name, middle_name, last_name, mobile_phone, post, sqlDate, salary, work_shedule, skills);
+        employeeId++;
+        return "childPage";
+    }
 
 
 
@@ -349,4 +438,39 @@ Long hospId = 2L;
     }
 
 
+    @PostMapping("/deletePatient")
+    private String deletePatient(@RequestParam Long id,  Model model){
+        patientRepository.deleteById(id);
+        return "mainPage";
+    }
+
+    @PostMapping("/deleteChildb")
+    private String deleteChildb(@RequestParam Long id,  Model model){
+        childbirthRepository.deleteById(id);
+        return "childbPage";
+    }
+
+    @PostMapping("/deleteChild")
+    private String deleteChild(@RequestParam Long id,  Model model){
+        childRepository.deleteById(id);
+        return "childPage";
+    }
+
+    @PostMapping("/deleteEmployee")
+    private String deleteEmployee(@RequestParam Long id,  Model model){
+        employeeRepository.deleteById(id);
+        return "employeePage";
+    }
+
+    @PostMapping("/deleteHosp")
+    private String deleteHosp(@RequestParam Long id,  Model model){
+        hospitalizationRepository.deleteById(id);
+        return "hospPage";
+    }
+
+    @PostMapping("/deleteWard")
+    private String deleteWard(@RequestParam Long id,  Model model){
+        wardRepository.deleteById(id);
+        return "wardPage";
+    }
 }

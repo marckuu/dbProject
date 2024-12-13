@@ -25,5 +25,15 @@ public interface WardRepository extends CrudRepository<Ward, Long> {
              @Param("equipment") String equipment,
              @Param("id") Long id
              );
+
+    @Modifying
+    @Transactional
+    @Query(value = "INSERT INTO Ward (id, available_places, w_type, equipment) " +
+            "VALUES (:id, :available_places, :wType, :equipment)", nativeQuery = true)
+    void addWard(@Param("id") Long id,
+                    @Param("available_places") Integer available_places,
+                    @Param("wType") String wType,
+                    @Param("equipment") String equipment);
+
 }
 

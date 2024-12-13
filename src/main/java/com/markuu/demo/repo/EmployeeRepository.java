@@ -35,4 +35,20 @@ public interface EmployeeRepository extends CrudRepository<Employee, Long> {
              @RequestParam String work_schedule,
              @RequestParam String skills,
              @RequestParam Long id);
+
+
+    @Modifying
+    @Transactional
+    @Query(value = "INSERT INTO Employee (id, first_name, middle_name, last_name, mobile_phone, post, experience, salary, work_schedule, skills)" +
+            "VALUES (:id, :first_name, :middle_name, :last_name, :mobile_phone, :post, :experience, :salary, :work_shedule, :skills)", nativeQuery = true)
+    void addEmployee(@Param("id") Long id,
+                  @Param("first_name") String first_name,
+                  @Param("middle_name") String middle_name,
+                  @Param("last_name") String last_name,
+                  @Param("mobile_phone") String mobile_phone,
+                  @Param("post") String post,
+                  @Param("experience") Date experience,
+                  @Param("salary") Integer salary,
+                  @Param("work_shedule") String work_shedule,
+                  @Param("skills") String skills);
 }

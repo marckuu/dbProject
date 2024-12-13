@@ -73,15 +73,15 @@ public class Ward {
     private String equipment;
 
     // Создается список находящихся пациентов и создается метка как ward для доступа в patients
-    @OneToMany(mappedBy = "ward")
+    @OneToMany(mappedBy = "ward", cascade = CascadeType.ALL)
     private List<Patient> patients;
 
     // Создается список родов и создается метка как ward для доступа в Childbirth
-    @OneToMany(mappedBy = "ward")
+    @OneToMany(mappedBy = "ward", cascade = CascadeType.ALL)
     private List<Patient> Childbirth;
 
     // Создается список детей и создается метка как ward для доступа в child
-    @OneToMany(mappedBy = "ward")
+    @OneToMany(mappedBy = "ward", cascade = CascadeType.ALL)
     private List<Child> child;
 
 

@@ -116,6 +116,6 @@ public class Employee {
     private String skills;
 
     // Список родов и метка для использования id в childbirth
-    @OneToMany(mappedBy = "employee")
+    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
     private List<Childbirth> childbirths;
 }

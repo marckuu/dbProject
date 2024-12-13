@@ -42,15 +42,13 @@
 
         </div>
         <div>
-            <form action="/report1" method="get" class="d-inline">
+            <form action="/toReport1" method="get" class="d-inline">
                 <button type="submit" class="btn btn-secondary">Отчет 1</button>
             </form>
-            <form action="/report2" method="get" class="d-inline">
+            <form action="/toAdminReport2" method="get" class="d-inline">
                 <button type="submit" class="btn btn-secondary">Отчет 2</button>
             </form>
-            <form action="/report3" method="get" class="d-inline">
-                <button type="submit" class="btn btn-secondary">Отчет 3</button>
-            </form>
+            <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editAddModal">Добавить</button>
         </div>
     </header>
 
@@ -79,6 +77,10 @@
                         th:data-pathologies="${item.pathologies}"
                         th:data-patient-id="${item.patient.id}"
                         th:data-ward="${item.ward.id}">Редактировать</button>
+                <form action="/deleteChild" method="post">
+                    <input type="hidden" name="id" th:value="${item.id}"/>
+                    <button type="submit" class="btn btn-danger btn-sm">Удалить</button>
+                </form>
             </li>
             <li th:if="${#lists.isEmpty(children)}" class="list-group-item">Данных нет</li>
         </ul>
@@ -149,6 +151,75 @@
             </div>
         </div>
     </div>
+
+
+    <!-- МОДАЛЬНОЕ ОКНО ДЛЯ ДОБАВЛЕНИЯ -->
+    <div class="modal fade" id="editAddModal" tabindex="-1" role="dialog" aria-labelledby="editChildModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" >Добавить ребенка</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="addChildForm" action="/addChild" method="post">
+                        <div class="form-group">
+                            <label for="childFirstName">Имя</label>
+                            <input type="text" class="form-control" id="first_name" name="first_name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="childMiddleName">Отчество</label>
+                            <input type="text" class="form-control" id="middle_name" name="middle_name">
+                        </div>
+                        <div class="form-group">
+                            <label for="childLastName">Фамилия</label>
+                            <input type="text" class="form-control" id="last_name" name="last_name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="childBirthDate">Дата рождения</label>
+                            <input type="date" class="form-control" id="birth_date" name="birth_date" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="childHeight">Рост</label>
+                            <input type="number" class="form-control" id="height" name="height" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="childWeight">Вес</label>
+                            <input type="number" class="form-control" id="weight" name="weight" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="childGender">Пол</label>
+                            <select class="form-control" id="gender" name="gender" required>
+                                <option value="М">Мужской</option>
+                                <option value="Ж">Женский</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="childPathologies">Патологии</label>
+                            <input type="text" class="form-control" id="pathologies" name="pathologies">
+                        </div>
+                        <div class="form-group">
+                            <label for="childMother">Матерь</label>
+                            <input type="text" class="form-control" id="patient_id" name="patient_id">
+                        </div>
+                        <div class="form-group">
+                            <label for="childWard">Палата</label>
+                            <input type="text" class="form-control" id="ward_id" name="ward_id">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                    <button type="submit" class="btn btn-primary" form="addChildForm">Добавить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
     </div>
 
     <script>

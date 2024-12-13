@@ -44,14 +44,11 @@
 
     </div>
     <div>
-      <form action="/report1" method="get" class="d-inline">
+      <form action="/toReport1" method="get" class="d-inline">
         <button type="submit" class="btn btn-secondary">Отчет 1</button>
       </form>
-      <form action="/report2" method="get" class="d-inline">
+      <form action="/toAdminReport2" method="get" class="d-inline">
         <button type="submit" class="btn btn-secondary">Отчет 2</button>
-      </form>
-      <form action="/report3" method="get" class="d-inline">
-        <button type="submit" class="btn btn-secondary">Отчет 3</button>
       </form>
       <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editAddModal">Добавить</button>
     </div>
@@ -72,6 +69,10 @@
                 th:data-hosp-data="${item.hosp_data}"
                 th:data-hosp-time="${item.hosp_time}"
                 th:data-hosp-reason="${item.hosp_reason}">Редактировать</button>
+        <form action="/deleteHosp" method="post">
+          <input type="hidden" name="id" th:value="${item.id}"/>
+          <button type="submit" class="btn btn-danger btn-sm">Удалить</button>
+        </form>
       </li>
       <li th:if="${#lists.isEmpty(hospitalizations)}" class="list-group-item">Данных нет</li>
     </ul>
@@ -122,7 +123,7 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" >Редактировать госпитализацию</h5>
+          <h5 class="modal-title" >Добавить госпитализацию</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -149,7 +150,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
-          <button type="submit" class="btn btn-primary" form="addHospForm">Сохранить изменения</button>
+          <button type="submit" class="btn btn-primary" form="addHospForm">Добавить</button>
         </div>
       </div>
     </div>

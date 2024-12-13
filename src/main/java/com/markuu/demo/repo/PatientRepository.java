@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
 import java.sql.Date;
+import java.sql.Time;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,6 +34,21 @@ public interface PatientRepository extends CrudRepository<Patient, Long> {
              @Param("mobile_phone") String mobile_phone, @Param("birth_date") Date birth_date, @Param("blood_type") String blood_type, @Param("medical_history") String medical_history,
              @Param("ward") Long ward, @Param("id") Long id);
 
+
+    @Modifying
+    @Transactional
+    @Query(value = "INSERT INTO Patient (id, first_name, middle_name, last_name, address, mobile_phone, birth_date, blood_type, medical_history, ward_id) " +
+            "VALUES (:id, :first_name, :middle_name, :last_name, :address, :mobile_phone, :birth_date, :blood_type, :medical_history, :ward_id)", nativeQuery = true)
+    void addPatient(@Param("id") Long id,
+                            @Param("first_name") String first_name,
+                            @Param("middle_name") String middle_name,
+                            @Param("last_name") String last_name,
+                            @Param("address") String address,
+                            @Param("mobile_phone") String mobile_phone,
+                            @Param("birth_date") Date birth_date,
+                            @Param("blood_type") String blood_type,
+                            @Param("medical_history") String medical_history,
+                            @Param("ward_id") Long ward_id);
 
 }
 

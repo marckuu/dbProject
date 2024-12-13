@@ -41,15 +41,13 @@
 
     </div>
     <div>
-      <form action="/report1" method="get" class="d-inline">
+      <form action="/toReport1" method="get" class="d-inline">
         <button type="submit" class="btn btn-secondary">Отчет 1</button>
       </form>
-      <form action="/report2" method="get" class="d-inline">
+      <form action="/toAdminReport2" method="get" class="d-inline">
         <button type="submit" class="btn btn-secondary">Отчет 2</button>
       </form>
-      <form action="/report3" method="get" class="d-inline">
-        <button type="submit" class="btn btn-secondary">Отчет 3</button>
-      </form>
+      <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editAddModal">Добавить</button>
     </div>
   </header>
 
@@ -76,6 +74,10 @@
                 th:data-childb-complications="${item.childB_complications}"
                 th:data-childb-ward="${item.ward.id}"
                 th:data-childb-employee="${item.employee.id}">Редактировать</button>
+        <form action="/deleteChildb" method="post">
+          <input type="hidden" name="id" th:value="${item.id}"/>
+          <button type="submit" class="btn btn-danger btn-sm">Удалить</button>
+        </form>
       </li>
       <li th:if="${#lists.isEmpty(childbirths)}" class="list-group-item">Данных нет</li>
     </ul>
@@ -135,6 +137,61 @@
         </div>
       </div>
     </div>
+    </div>
+
+
+    <!-- Модальное окно для Добавления родов -->
+    <div class="modal fade" id="editAddModal" tabindex="-1" role="dialog" aria-labelledby="editChildbirthModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" >Добавить роды</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form id="addChildbirthForm" action="/addChildb" method="post">
+              <div class="form-group">
+                <label for="patientid">Пациент</label>
+                <input type="text" class="form-control" id="patient_id" name="patient_id" required >
+              </div>
+              <div class="form-group">
+                <label for="birthDate">Дата</label>
+                <input type="date" class="form-control" id="childb_date" name="childb_date" required>
+              </div>
+              <div class="form-group">
+                <label for="childbirthStartTime">Начало</label>
+                <input type="time" class="form-control" id="childb_start_time" name="childb_start_time" required>
+              </div>
+              <div class="form-group">
+                <label for="childbirthEndTime">Конец</label>
+                <input type="time" class="form-control" id="childb_end_time" name="childb_end_time" required>
+              </div>
+              <div class="form-group">
+                <label for="childbirthType">Тип</label>
+                <input type="text" class="form-control" id="childb_type" name="childb_type" required>
+              </div>
+              <div class="form-group">
+                <label for="childbirthComplications">Осложнения</label>
+                <input type="text" class="form-control" id="childb_complications" name="childb_complications">
+              </div>
+              <div class="form-group">
+                <label for="childbirthWard">Палата</label>
+                <input type="text" class="form-control" id="ward_id" name="ward_id">
+              </div>
+              <div class="form-group">
+                <label for="childbirthEmployee">Акушер</label>
+                <input type="text" class="form-control" id="employee_id" name="employee_id">
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+            <button type="submit" class="btn btn-primary" form="addChildbirthForm">Сохранить</button>
+          </div>
+        </div>
+      </div>
     </div>
     </div>
 
