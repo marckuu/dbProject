@@ -1,5 +1,6 @@
 package com.markuu.demo.controllers;
 
+import com.markuu.demo.configManager;
 import com.markuu.demo.dto.Report2AdminData;
 import com.markuu.demo.dto.Report2Data;
 import com.markuu.demo.dto.ReportData;
@@ -7,7 +8,6 @@ import com.markuu.demo.dto.UserMainPageData;
 import com.markuu.demo.models.*;
 import com.markuu.demo.repo.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,6 +27,8 @@ import java.util.List;
 
 @Controller
 public class MainController {
+
+
 
     @Autowired
     private PatientRepository patientRepository;
@@ -252,13 +254,13 @@ public class MainController {
 
 
 
-
-Long hospId = 2L;
-Long patientId = 2L;
-Long wardId = 3L;
-Long childbId = 3L;
-Long childId = 3L;
-Long employeeId = 3L;
+    configManager conMan = new configManager();
+    Long hospId = conMan.getHospId();
+    Long patientId = conMan.getPatientId();
+    Long wardId = conMan.getWardId();
+    Long childbId = conMan.getChildbId();
+    Long childId = conMan.getChildId();
+    Long employeeId = conMan.getEmployeeId();
 
 
     @PostMapping("/addHosp")
@@ -272,6 +274,8 @@ Long employeeId = 3L;
         java.sql.Time sqlTime = java.sql.Time.valueOf(localTime);
         hospitalizationRepository.addHospitalization(sqlDate, sqlTime, hReason, pId, hospId);
         hospId++;
+        conMan.setHospId(hospId);
+        conMan.saveConfig();
         return "hospPage";
     }
 
@@ -291,6 +295,8 @@ Long employeeId = 3L;
         java.sql.Date sqlDate = java.sql.Date.valueOf(birth_date);
         patientRepository.addPatient(patientId, first_name, middle_name, last_name, address, mobile_phone, sqlDate, blood_type, medical_history, ward_id);
         patientId++;
+        conMan.setPatientId(patientId);
+        conMan.saveConfig();
         return "mainPage";
     }
 
@@ -302,6 +308,8 @@ Long employeeId = 3L;
     ) {
         wardRepository.addWard(wardId, available_places, wType, equipment);
         wardId++;
+        conMan.setWardId(wardId);
+        conMan.saveConfig();
         return "wardPage";
     }
 
@@ -322,6 +330,8 @@ Long employeeId = 3L;
         java.sql.Time sqlEndTime = java.sql.Time.valueOf(localEndTime);
         childbirthRepository.addChildb(childbId, sqlDate, sqlStartTime, sqlEndTime, childb_type, childb_complications, ward_id, patient_id, employee_id);
         childbId++;
+        conMan.setChildbId(childbId);
+        conMan.saveConfig();
         return "mainPage";
     }
 
@@ -340,6 +350,8 @@ Long employeeId = 3L;
         java.sql.Date sqlDate = java.sql.Date.valueOf(birth_date);
         childRepository.addChild(childId, first_name, middle_name, last_name, sqlDate, height, weight, gender, pathologies, patient_id, ward_id);
         childId++;
+        conMan.setChildId(childId);
+        conMan.saveConfig();
         return "childPage";
     }
 
@@ -357,6 +369,8 @@ Long employeeId = 3L;
         java.sql.Date sqlDate = java.sql.Date.valueOf(experience);
         employeeRepository.addEmployee(employeeId, first_name, middle_name, last_name, mobile_phone, post, sqlDate, salary, work_shedule, skills);
         employeeId++;
+        conMan.setEmployeeId(employeeId);
+        conMan.saveConfig();
         return "childPage";
     }
 
