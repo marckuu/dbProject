@@ -416,6 +416,26 @@ Long employeeId = 3L;
         return "userMainPage";
     }
 
+    @GetMapping("/toReport2")
+    private String toReport2(Model model) {
+        List<Tuple > reportDataTuples = reportsRepository.report2();
+        List<Report2Data> report2Data = new ArrayList<>();
+
+        for (Tuple tuple : reportDataTuples) {
+            Report2Data data = new Report2Data();
+            data.setWardId(tuple.get(0, BigInteger.class));
+            data.setPatientName(tuple.get(1, String.class));
+            data.setPatientId(tuple.get(2, BigInteger.class));
+            data.setChildbType(tuple.get(3, String.class));
+            data.setEmployeeName(tuple.get(4, String.class));
+            data.setEmployeeId(tuple.get(5, BigInteger.class));
+            data.setEmployeePost(tuple.get(6, String.class));
+            report2Data.add(data);
+        }
+
+        model.addAttribute("report2Data", report2Data);
+        return "report2";
+    }
 
     @GetMapping("/toAdminReport2")
     private String toReport2Admin(Model model) {

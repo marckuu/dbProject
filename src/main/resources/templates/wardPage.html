@@ -139,7 +139,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
-          <button type="submit" class="btn btn-primary" form="addWardForm">Сохранить изменения</button>
+          <button type="submit" class="btn btn-primary" form="addWardForm">Добавить</button>
         </div>
       </div>
     </div>
@@ -156,7 +156,7 @@
     var id = button.data('id');
 
     var modal = $(this);
-    modal.find('.modal-title').text('Редактировать ' + id);
+    modal.find('.modal-title').text('Редактировать палату' + id);
     modal.find('#wardId').val(id);
     modal.find('#wardType').val(type);
     modal.find('#wardAvailablePlaces').val(availablePlaces);

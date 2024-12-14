@@ -55,7 +55,7 @@
                 <td th:text="${reportItem.employeeLastName}"></td>
                 <td th:text="${reportItem.employeePost}"></td>
             </tr>
-            <tr th:if="${#lists.isEmpty(reportData)}">
+            <tr th:if="${#lists.isEmpty(UserMainPageData)}">
                 <td colspan="8" class="text-center">Данных нет</td>
             </tr>
             </tbody>

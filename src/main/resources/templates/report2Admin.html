@@ -45,7 +45,7 @@
         <td th:text="${reportItem.experience}"></td>
         <td th:text="${reportItem.skills}"></td>
       </tr>
-      <tr th:if="${#lists.isEmpty(reportData)}">
+      <tr th:if="${#lists.isEmpty(report2AdminData)}">
         <td colspan="8" class="text-center">Данных нет</td>
       </tr>
       </tbody>

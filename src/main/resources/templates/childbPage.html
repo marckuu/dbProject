@@ -66,7 +66,7 @@
         <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editChildbirthModal"
                 th:data-id="${item.id}"
                 th:data-patient="${item.patient.id}"
-                th:data-patientName="${item.patient.first_name}"
+                th:data-patient-name="${item.patient.first_name}"
                 th:data-childb-date="${item.childB_date}"
                 th:data-childb-start-time="${item.childB_start_time}"
                 th:data-childb-end-time="${item.childB_end_time}"
@@ -188,7 +188,7 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
-            <button type="submit" class="btn btn-primary" form="addChildbirthForm">Сохранить</button>
+            <button type="submit" class="btn btn-primary" form="addChildbirthForm">Добавить</button>
           </div>
         </div>
       </div>
@@ -201,7 +201,7 @@
   $('#editChildbirthModal').on('show.bs.modal', function (event) {
     var button = $(event.relatedTarget);
     var patient = button.data('patient');
-    var patientName = button.data('patientName');
+    var patientName = button.data('patient-name');
     var childBDate = button.data('childb-date');
     var childBStartTime = button.data('childb-start-time');
     var childBEndTime = button.data('childb-end-time');
