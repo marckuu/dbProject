@@ -55,35 +55,54 @@
 
     <div id="childrenDiv" class="data-div">
         <h3>Список детей</h3>
-        <ul class="list-group">
-            <li th:each="item : ${childs}" class="list-group-item d-flex justify-content-between align-items-center">
-                <span th:text="'Имя: ' + ${item.first_name} + ' ' + ${item.middle_name} + ' ' + ${item.last_name}">Имя ребенка</span>
-                <span th:text="'Дата рождения: ' + ${item.birth_date}">Дата рождения</span>
-                <span th:text="'Рост: ' + ${item.height} + ' см'">Рост</span>
-                <span th:text="'Вес: ' + ${item.weight} + ' кг'">Вес</span>
-                <span th:text="'Пол: ' + ${item.gender}">Пол</span>
-                <span th:text="'Патологии: ' + ${item.pathologies}">Патологии</span>
-                <span th:text="'Матерь: ' + ${item.patient.id}">Матерь</span>
-                <span th:text="'Палата: ' + ${item.ward.id}">Палата</span>
-                <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editChildModal"
-                        th:data-id="${item.id}"
-                        th:data-first-name="${item.first_name}"
-                        th:data-middle-name="${item.middle_name}"
-                        th:data-last-name="${item.last_name}"
-                        th:data-birth-date="${item.birth_date}"
-                        th:data-height="${item.height}"
-                        th:data-weight="${item.weight}"
-                        th:data-gender="${item.gender}"
-                        th:data-pathologies="${item.pathologies}"
-                        th:data-patient-id="${item.patient.id}"
-                        th:data-ward="${item.ward.id}">Редактировать</button>
-                <form action="/deleteChild" method="post">
-                    <input type="hidden" name="id" th:value="${item.id}"/>
-                    <button type="submit" class="btn btn-danger btn-sm">Удалить</button>
-                </form>
-            </li>
-            <li th:if="${#lists.isEmpty(childs)}" class="list-group-item">Данных нет</li>
-        </ul>
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th>Имя</th>
+                <th>Дата рождения</th>
+                <th>Рост</th>
+                <th>Вес</th>
+                <th>Пол</th>
+                <th>Патологии</th>
+                <th>Матерь</th>
+                <th>Палата</th>
+                <th>Действия</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="item : ${childs}">
+                <td th:text="${item.first_name} + ' ' + ${item.middle_name} + ' ' + ${item.last_name}">Имя ребенка</td>
+                <td th:text="${item.birth_date}">Дата рождения</td>
+                <td th:text="${item.height} + ' см'">Рост</td>
+                <td th:text="${item.weight} + ' кг'">Вес</td>
+                <td th:text="${item.gender}">Пол</td>
+                <td th:text="${item.pathologies}">Патологии</td>
+                <td th:text="${item.patient.id}">Матерь</td>
+                <td th:text="${item.ward.id}">Палата</td>
+                <td>
+                    <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editChildModal"
+                            th:data-id="${item.id}"
+                            th:data-first-name="${item.first_name}"
+                            th:data-middle-name="${item.middle_name}"
+                            th:data-last-name="${item.last_name}"
+                            th:data-birth-date="${item.birth_date}"
+                            th:data-height="${item.height}"
+                            th:data-weight="${item.weight}"
+                            th:data-gender="${item.gender}"
+                            th:data-pathologies="${item.pathologies}"
+                            th:data-patient-id="${item.patient.id}"
+                            th:data-ward="${item.ward.id}">Редактировать</button>
+                    <form action="/deleteChild" method="post" style="display:inline;">
+                        <input type="hidden" name="id" th:value="${item.id}"/>
+                        <button type="submit" class="btn btn-danger btn-sm">Удалить</button>
+                    </form>
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(childs)}">
+                <td colspan="9" class="text-center">Данных нет</td>
+            </tr>
+            </tbody>
+        </table>
     </div>
 
 
